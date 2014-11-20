@@ -1,0 +1,29 @@
+1 As a player I will login with any valid email and password and be
+  authenticated as "Jhon Doe" with 1000 credits to spend.
+
+2 As a player I can logout to end the session.
+
+3 As a player I can chose a base value i want to bet and between 3 betting modes,
+  1, 2, 3 or 4 slots, each having a higher risk/reward factor then the
+  previous. The bet return is calculated by the formula:
+   (base value x Difficulty x (Penalty || Bonus)) - base value 
+
+4 As a player when betting I must choose as many slots as i choose to bet from a
+  randomized bidirectional board of 5x5 slots with:
+ - 13 neutral slots (leafs)
+ - 5 x1 bonus (berries)
+ - 1 x3 bonus (honey)
+ - 5 x1 penalty (bees)
+ - 1 x3 penalty (bear trap)
+ 
+5 As a player when I choose a slot with a penalty the bet ends and the return is
+  calculated.
+
+6 As a player if I succeed at choosing no penalty slots after choosing all the 
+  slots, 1, 2, 3 or 4 depending on the chosen mode, the bet ends and the return
+  is calculated.
+
+7 As a player I can't lose more credits then i have.
+
+8 As a player I can't make best lower then 1 credit.
+

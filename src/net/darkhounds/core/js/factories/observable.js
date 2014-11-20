@@ -19,10 +19,12 @@ angular.module('core.darkhounds.net').factory('observable', ['$timeout', functio
             $observable.$broadcast = function(type)                             {
                 var args    = [];
                 if (arguments && arguments.length > 1) for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
-                if ($observable._listeners[type])                               {
-                    for (var id in $observable._listeners[type])
-                        $observable._listeners[type][id].apply($observable, args);
-                }
+                setTimeout(function()                                           {
+                    if ($observable._listeners[type])                           {
+                        for (var id in $observable._listeners[type])
+                            $observable._listeners[type][id].apply($observable, args);
+                    }
+                }, 0);
             };
             return $observable;
         }
