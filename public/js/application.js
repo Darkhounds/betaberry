@@ -1,0 +1,1 @@
+"use strict";angular.module("betaberry.darkhounds.net",[]),angular.module("betaberry.darkhounds.net").directive("viewport",[function(){return{scope:{},transcode:!0,replace:!0,templateUrl:"html/templates/viewport.html",controller:["$scope",function(){}]}}]);
