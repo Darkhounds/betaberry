@@ -15,7 +15,7 @@
     "karma": "^0.12.25",
     "mocha": "^2.0.1",
     "chai": "^1.9.2",
-    "compass": "^0.1.0",
+    "compass": "~0.1.0",
     "requirejs": "^2.1.15",
     "karma-mocha": "^0.1.9",
     "karma-sinon-chai": "^0.2.0",
