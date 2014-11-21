@@ -31,12 +31,6 @@ angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observabl
             return _session?_session.credits:0;
         };
         
-//        serviceAPI.$on('betted', function(data)                                 {
-//            
-//        });
-//        serviceAPI.$on('played', function(data)                                 {
-//            
-//        });
         return service;
     }
 ]);
