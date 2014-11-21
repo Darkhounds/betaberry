@@ -26,22 +26,12 @@ angular.module('betaberry.darkhounds.net').factory('serviceAPI', ['observable', 
             var request = serviceRemote.bet(amount, level);
             request.$on('resolved', function(response)                          {
                 if (callback && typeof callback === "function") callback(response);
-                if (!response.error) service.$broadcast('logedout', response.data);
+                if (!response.error) service.$broadcast('betted', response.data);
             });
             //
             return service;
         };
         
-//        service.getName     = function()                                        {
-//            if (!session) return "";
-//            var name    = "";
-//            if (session.name)       name += session.name;
-//            if (session.lastName)   name += (name?" ":"") + session.lastName;
-//            return name;
-//        };
-//        service.getCredits  = function()                                        {
-//            return session?session.credits:0;
-//        };
         return service;
     }
 ]);

@@ -46,4 +46,44 @@ describe("Remote :: net/darkhounds/betaberry/cli/js/services/api.js", function()
             });
         });
     });
+
+
+    describe("Bet", function()                                                  {
+        it("Should return the error code 'sessionClosed' ", function(done)      {
+            remote.bet(100, 1, function(response)                               {
+                expect(response.error).to.exist;
+                expect(response.error.code).to.equal("sessionClosed");
+                done();
+            });
+        });
+
+        it("Should return the error code 'betToHigh' ", function(done)          {
+            remote.login("test@test.com", "1234567", function()                 {
+                remote.bet(10000, 1, function(response)                         {
+                    expect(response.error).to.exist;
+                    expect(response.error.code).to.equal("betToHigh");
+                    done();
+                });
+            });
+        });
+
+        it("Should place a new bet of 100 credits at diff of 1", function(done) {
+            remote.bet(100, 1, function(response)                               {
+                expect(response).to.exist;
+                expect(response.data).to.exist;
+                expect(response.data.amount).to.equal(100);
+                expect(response.data.level).to.equal(1);
+                done();
+            });
+        });
+        
+        it("Should return the error code 'betOpened' ", function(done)          {
+            remote.bet(100, 1, function(response)                               {
+                expect(response.error).to.exist;
+                expect(response.error.code).to.equal("betOpened");
+                done();
+            });
+        });
+    });
+    
 });
