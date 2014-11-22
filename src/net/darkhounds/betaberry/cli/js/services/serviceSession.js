@@ -11,13 +11,20 @@ angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observabl
             _session = null;
             service.$broadcast('changed');
         });
+        serviceAPI.$on('played', function(data)                                 {
+            if (!_session) retun;
+            _session.credits = data.credits;
+            service.$broadcast('changed');
+        });
         
         service.login       = function(email, password, callback)               {
             serviceAPI.login(email, password, callback);
+            return service;
         };
         
         service.logout      = function(callback)                                {
             serviceAPI.logout(callback);
+            return service;
         };
         
         service.getName     = function()                                        {

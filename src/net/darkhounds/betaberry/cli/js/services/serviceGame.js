@@ -4,19 +4,28 @@ angular.module('betaberry.darkhounds.net').factory('serviceGame', ['observable',
 
         var _bet            = null;
         var _slots          = null;
+        var _closed         = true;
         serviceAPI.$on('betted', function(data)                                 {
-            _bet = data;
+            _bet            = data;
+            _closed         = !_bet;
             service.$broadcast('changed');
         });
-        serviceAPI.$on('played', function()                                     {
-            _slots = null;
+        serviceAPI.$on('played', function(data)                                 {
+            _closed = !_bet || data.closed;
+            _slots  = data.slots;
             service.$broadcast('changed');
         });
         
         service.bet         = function(amount, level, callback)                 {
             serviceAPI.bet(amount, level, callback);
+            return service;
         };
-
+        
+        service.play        = function(cell, callback)                          {
+            serviceAPI.play(cell, callback);
+            return service;
+        };
+        
         service.getBet      = function()                                        {
             return _bet;
         };
@@ -28,6 +37,9 @@ angular.module('betaberry.darkhounds.net').factory('serviceGame', ['observable',
         };
         service.getSlots    = function()                                        {
             return _slots;
+        };
+        service.getClosed    = function()                                       {
+            return _closed;
         };
         
         return service;
