@@ -5,7 +5,6 @@ describe("Game :: net/darkhounds/betaberry/cli/js/services/serviceGame.js", func
     var session;
     var game;
     beforeEach(function(done)                                                   {
-        angular.mock.module('core.darkhounds.net');
         angular.mock.module('betaberry.darkhounds.net');
         
         inject(function(serviceGame, serviceSession)                            {

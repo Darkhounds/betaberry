@@ -4,7 +4,6 @@ describe("Remote :: net/darkhounds/betaberry/cli/js/services/serviceRemote.js", 
 
     var remote;
     beforeEach(function()                                                       {
-        angular.mock.module('core.darkhounds.net');
         angular.mock.module('betaberry.darkhounds.net');
         
         inject(function(serviceRemote)                                          {

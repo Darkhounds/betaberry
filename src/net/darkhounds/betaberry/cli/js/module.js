@@ -1,3 +1,3 @@
 'use strict';
 
-angular.module('betaberry.darkhounds.net', []);
+angular.module('betaberry.darkhounds.net', ['core.darkhounds.net']);

@@ -26,7 +26,10 @@ angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observabl
             serviceAPI.logout(callback);
             return service;
         };
-        
+
+        service.isOpen      = function()                                        {
+            return !!_session;
+        };
         service.getName     = function()                                        {
             if (!_session) return "";
             var name    = "";

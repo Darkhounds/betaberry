@@ -22,7 +22,7 @@ module.exports = function(grunt)                                                
                         'src/net/darkhounds/betaberry/cli/js/directives/**/*.js',
                         'src/net/darkhounds/betaberry/cli/js/filters/**/*.js',
                         'src/net/darkhounds/betaberry/cli/js/controllers/**/*.js',
-                        'src/net/darkhounds/betaberry/cli/js/plugins/**/*.js',
+                        'src/net/darkhounds/betaberry/cli/js/plugins/**/*.js'
                     ]
                 }
             }

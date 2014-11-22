@@ -4,7 +4,6 @@ describe("API :: net/darkhounds/betaberry/cli/js/services/serviceAPI.js", functi
 
     var api;
     beforeEach(function()                                                       {
-        angular.mock.module('core.darkhounds.net');
         angular.mock.module('betaberry.darkhounds.net');
 
         inject(function(serviceAPI)                                             {
