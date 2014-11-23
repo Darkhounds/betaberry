@@ -1,13 +1,13 @@
 <div class="board" data-ng-show="isLogged">
     
-    <div data-ng-show="!hasBetted || isOver">
+    <div class="panel" id="BET" data-ng-show="!hasBetted || isOver">
         <div class="label">Bet:</div><input data-ng-model="amount">
         <div data-ng-click="bet(amount, 1)">Bet x1</div>
         <div data-ng-click="bet(amount, 2)">Bet x2</div>
         <div data-ng-click="bet(amount, 3)">Bet x3</div>
     </div>
     
-    <div data-ng-show="hasBetted">
+    <div class="panel" id="ROWS" data-ng-show="hasBetted">
         <div class="row" data-ng-repeat="slots in rows">
             <data-slot data-ng-repeat="item in slots" data-item="item"/>
         </div>
