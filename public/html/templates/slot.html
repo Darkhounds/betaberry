@@ -1,1 +1,5 @@
-<div class="slot" data-ng-class="[state, selected?'selected':'']" data-ng-click="play()">slot({{item.row}},{{item.col}}): {{item.token}}</div>
+<div class="slot" data-ng-class="[state, selected?'selected':'']" data-ng-click="play()">
+    <div class="label">{{item.row}},{{item.col}}</div>
+    <div class="label">{{item.token}}</div>
+    <div class="label" data-ng-show="selected">Danger: {{danger}}%</div>
+</div>

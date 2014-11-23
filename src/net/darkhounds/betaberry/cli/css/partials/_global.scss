@@ -1,13 +1,19 @@
 html, body                                                                      {
-    display:    block;
-    padding:    0px;
-    margin:     0px;
-    width:      100%;
-    height:     100%;
+  display:    block;
+  padding:    0px;
+  margin:     0px;
+  width:      100%;
+  height:     100%;
+  font-size:  0.9em;
 }
 
 .panel                                                                          {
+  border: solid 1px #000000;
+  padding: 2px;
   
+  > *                                                                           {
+    padding: 2px;
+  }
 }
 
 .label                                                                          {
@@ -17,5 +23,11 @@ html, body                                                                      
 
 }
 .button                                                                         {
+  border: outset 1px #000000;
+  background-color: #808080;
+  color: #ffffff;
+}
 
+.disabled {
+  opacity: 0.2;
 }

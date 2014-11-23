@@ -1,8 +1,19 @@
 .board                                                                          {
+  display:        inline-flex;
+  flex-direction: column;
+  
+  
   .panel                                                                        {
+    display:        inline-flex;
+    flex-direction: row;
+    
     .label                                                                      {
 
     }
+  }
+
+  .panel.disabled                                                               {
+    opacity: 0.6;
   }
   
   #BET                                                                          {
@@ -10,6 +21,11 @@
   }
   
   #ROWS                                                                         {
+    flex-direction: column;
     
+    .row                                                                        {
+      display:        inline-flex;
+      flex-direction: row;
+    }
   }
 }

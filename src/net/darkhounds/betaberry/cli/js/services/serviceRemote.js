@@ -1,6 +1,7 @@
 angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
     function()                                                                  {
         var service         = {};
+        var _gridSize       = 5;
         
         function _createRequest()                                               {
             // return observable.create({response:{data: null, error: null}});
@@ -84,7 +85,7 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
         var _traps      = 1;
         var _bees       = 2;
         function _createPuzzle()                                                {
-            var cellPool    = _createGrid(5, null, true);
+            var cellPool    = _createGrid(_gridSize, null, true);
             var tokens  = {
                 honney:     _drawCells(cellPool, _honey),
                 berries:    _drawCells(cellPool, _berries),
@@ -92,7 +93,7 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
                 bees:       _drawCells(cellPool, _bees)
             };
 
-            var puzzle      = _createGrid(5, "");
+            var puzzle      = _createGrid(_gridSize, "");
             _setCellsToType(puzzle, tokens.honney,  "honey");
             _setCellsToType(puzzle, tokens.berries, "berry");
             _setCellsToType(puzzle, tokens.traps,   "trap");
@@ -141,6 +142,7 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             if (!request.response.error)                                        {
                 var token                   = _puzzleMockup[cell[0]][cell[1]];
                 cell.push(token);
+                cell.push(_getDanger(cell[0], cell[1], _puzzleMockup));
                 _playedCells.push(cell);
 
                 request.response.data       = {
@@ -196,10 +198,40 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
                 case 'berry':   bonus   += 2; break;
                 default: break;
             }
-            var gain = ((trap?-3:(bee?-1:bonus)) * bet.amount) - bet.amount;
+            var gain = (((trap?-3:(bee?-1:bonus)) * bet.amount) * bet.level) - bet.amount;
             
             return gain;
         }
+
+        function _getDanger(row, col, puzzle)                                   {
+            var tokens  = [];
+            tokens.push((row <= 0 || col <= 0)?null:puzzle[row-1][col-1]);
+            tokens.push((row <= 0)?null:puzzle[row-1][col]);
+            tokens.push((row <= 0 || col >= _gridSize-1)?null:puzzle[row-1][col+1]);
+            tokens.push((col <= 0)?null:puzzle[row][col-1]);
+            tokens.push((col >= _gridSize-1)?null:puzzle[row][col+1]);
+            tokens.push((row >= _gridSize-1 || col <= 0)?null:puzzle[row+1][col-1]);
+            tokens.push((row >= _gridSize-1)?null:puzzle[row+1][col]);
+            tokens.push((row >= _gridSize-1 || col >= _gridSize-1)?null:puzzle[row+1][col+1]);
+            
+            var danger  = 0;
+            for (var i in tokens) if (tokens[i])
+                danger += _tokenToDanger(tokens[i]);
+
+            return danger;
+        }
+        
+        function _tokenToDanger(token)                                          {
+            console.log("token", token);
+            switch (token)                                                      {
+                case "bee":     return 1;
+                case "trap":    return 1;
+                case "berry":   return -1;
+                case "honey":   return -1;
+                default:        return 0;
+            }
+        }
+        
         
         return service;
     }

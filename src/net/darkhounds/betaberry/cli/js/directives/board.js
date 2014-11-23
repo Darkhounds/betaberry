@@ -26,7 +26,6 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
                 $scope.hasBetted    = serviceGame.hasBetted();
                 $scope.isOver       = serviceGame.isClosed();
                 $scope.gain         = serviceGame.getGain();
-                // console.log("Gain:", $scope.gain);
                 
                 _updateRows($scope.rows, serviceGame.getSlots(), serviceGame.getPuzzle());
                 $scope.$apply();
@@ -59,6 +58,7 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
                 for (var k in slots)                                            {
                     var slot        = rows[slots[k][0]][slots[k][1]];
                     slot.token      = slots[k][2];
+                    slot.danger     = slots[k][3];
                     slot.hidden     = false;
                     slot.selected   = true;
                 }

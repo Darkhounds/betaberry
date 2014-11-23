@@ -9,14 +9,17 @@ angular.module('betaberry.darkhounds.net').directive('slot', [function()     {
         controller:     ['$scope', 'serviceGame', function($scope, serviceGame) {
             $scope.state    = "hidden";
             $scope.selected = false;
+            $scope.danger   = 0;
             
             $scope.play    = function()                                         {
+                if ($scope.item.selected) return;
                 serviceGame.play([$scope.item.row, $scope.item.col])
             };
             
             $scope.$watch("item", function()                                    {
                 $scope.state    = _switchState($scope.item);
                 $scope.selected = $scope.item?$scope.item.selected:false;
+                $scope.danger   = ($scope.item && $scope.item.danger)?(Math.round(($scope.item.danger/8) * 100)):0;
             }, true);
             
             function _switchState (item)                                        {

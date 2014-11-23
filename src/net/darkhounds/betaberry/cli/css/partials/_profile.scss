@@ -1,10 +1,13 @@
 .profile                                                                        {
   .panel                                                                        {
+    display:        inline-flex;
+    flex-direction: row;
+    
     .label                                                                      {
       
     }
     .field                                                                      {
-      
+      width: 75px;
     }
     .button                                                                     {
       
