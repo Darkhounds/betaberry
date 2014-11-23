@@ -6,7 +6,10 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             // return observable.create({response:{data: null, error: null}});
             return {response:{data: null, error: null}};
         }
-        
+
+        var _betMockup      = null;
+        var _puzzleMockup   = null;
+        var _playedCells    = [];
         var _sessionMockup  = null;
         service.login       = function(email, password, callback)               {
             // TODO: Do the actual http request to the server API
@@ -14,9 +17,11 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             var request            = _createRequest();
             if (_sessionMockup) request.response.error = {code:'sessionNotClosed', msg:'Session Not Closed!'};
             else                                                                {
-                _sessionMockup          = 
+                _sessionMockup          = {name: "Jhon", lastName:"Doe", credits:1000};
                 request.response.data   = {name: "Jhon", lastName:"Doe", credits:1000};
             }
+            //
+            _resetBetAndPuzzle();
             //
             if (callback && typeof callback === "function") callback(request.response);
             //
@@ -31,6 +36,11 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
 //        function validatePassword (password)                                    {
 //            return password.length > 6;
 //        };
+        function _resetBetAndPuzzle()                                           {
+            _betMockup          = null;
+            _puzzleMockup       = null;
+            _playedCells.length = 0;
+        }
         
         service.logout      = function(callback)                                {
             // TODO: Do the actual http request to the server API
@@ -42,21 +52,22 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
                 request.response.data   = {};
             }
             //
+            _resetBetAndPuzzle();
+            //
             if (callback && typeof callback === "function") callback(request.response);
             //
             return request;
         };
         
-        var _betMockup      = null;
-        var _puzzleMockup   = null;
         service.bet         = function(amount, level, callback)                 {
             // TODO: Do an actual server API request
 
             var request            = _createRequest();
-            if (!_sessionMockup) request.response.error = {code: "sessionClosed", msg: "Session Closed!"};
-            else if (_betMockup) request.response.error = {code: "betOpened", msg: "Bet Already Opened!"};
-            else if (_sessionMockup.credits < amount) request.response.error = {code: "betToHigh", msg: "Bet is To High"};
-            else if (level < 1 || level > 4) request.response.error = {code: "betInvalidLevel", msg: "Bet has an invalid level"};
+            if (!_sessionMockup) request.response.error = {code: "sessionClosed", msg: "Session closed"};
+            else if (_betMockup) request.response.error = {code: "betOpened", msg: "Bet Already opened"};
+            else if (!amount || isNaN(amount) || amount < 1) request.response.error = {code: "betInvalidAmount", msg: "Invalid bet amount"};
+            else if (amount > _sessionMockup.credits) request.response.error = {code: "betToHigh", msg: "Bet is to high"};
+            else if (!level || isNaN(level) || level < 1 || level > 4) request.response.error = {code: "betInvalidLevel", msg: "Bet has an invalid level"};
             else                                                                {
                 _puzzleMockup           = _createPuzzle();
                 _betMockup              =
@@ -86,6 +97,8 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             _setCellsToType(puzzle, tokens.berries, "berry");
             _setCellsToType(puzzle, tokens.traps,   "trap");
             _setCellsToType(puzzle, tokens.bees,    "bee");
+            
+            console.log("Puzzle", puzzle);
             
             return puzzle;
         }
@@ -118,60 +131,74 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             for (var id in cells) grid[cells[id][0]][cells[id][1]] = type;
         }
 
-        var _playedCells    = [];
         service.play        = function(cell, callback)                          {
             // TODO: Do the actual http request to the server API
             //
             var request                 = _createRequest();
-            if (!_sessionMockup)    request.response.error = {code: "sessionClosed", msg: "Session Closed!"};
-            else if (!_betMockup)   request.response.error = {code: "betClosed", msg: "No Bet Opened!"};
-            
-            var token                   = _puzzleMockup[cell[0]][cell[1]];
-            cell.push(token);
-            _playedCells.push(cell);
-            
-            request.response.data       = {
-                closed: (_playedCells.length >= _betMockup.level || token == "trap" || token == "berrie"),
-                slots: _playedCells.slice()
-            };
-            
-            if (request.response.data.closed)                                   {
-                request.response.data.gain  = _endGame(_playedCells, _betMockup);
-                _sessionMockup.credits      = _sessionMockup.credits + request.response.data.gain;
-                if (_sessionMockup.credits < 0) _sessionMockup.credits = 0;
-                request.response.data.credits = _sessionMockup.credits;
-                //
-                _betMockup          = null;
-                _puzzleMockup       = null;
-                _playedCells.length = 0;
+            if (!_sessionMockup)    request.response.error = {code: "sessionClosed", msg: "Session Closed"};
+            else if (!_betMockup)   request.response.error = {code: "betClosed", msg: "No Bet Opened"};
+            else if (_checkPlayedCell(_playedCells, cell)) request.response.error = {code: "slotAlreadyPlayed", msg: "The played slot was already played"};
+            if (!request.response.error)                                        {
+                var token                   = _puzzleMockup[cell[0]][cell[1]];
+                cell.push(token);
+                _playedCells.push(cell);
+
+                request.response.data       = {
+                    closed: (_playedCells.length >= _betMockup.level || token == "trap" || token == "bee"),
+                    slots: _playedCells.slice()
+                };
+
+                if (request.response.data.closed)                               {
+                    var gain                        = _endGame(_playedCells, _betMockup);
+                    //
+                    _sessionMockup.credits          = _sessionMockup.credits + gain;
+                    if (_sessionMockup.credits < 0) _sessionMockup.credits = 0;
+                    //
+                    request.response.data.gain      = gain;
+                    request.response.data.credits   = _sessionMockup.credits;
+                    request.response.data.puzzle    = _parsePuzzle(_puzzleMockup);
+                    //
+                    _resetBetAndPuzzle();
+                }
             }
-            
+
             if (callback && typeof callback === "function") callback(request.response);
             
             return request;
         };
         
-//        function _getTokensFrom(cells)                                          {
-//            var tokens  = [];
-//            for (var id in cells) tokens.push(_puzzleMockup[cells[id][0]][cells[id][1]]);
-//            return tokens;
-//        }
+        function _checkPlayedCell(cells, cell)                                  {
+            for (var i in cells)
+                if (cells[i][0] == cell[0] && cells[i][1] == cell[1])
+                    return true;
+            //
+            return false;
+        }
         
-        function _endGame(cells, bet)                                           {
-            // var tokens      = _getTokensFrom(cells);
+        function _parsePuzzle(puzzle)                                           {
+            var parsed = [];
             
+            for (var i in puzzle)
+                for (var j in puzzle[i])
+                    parsed.push([i*1, j*1, puzzle[i][j]]);
+
+            return parsed;
+        }
+
+        function _endGame(cells, bet)                                           {
             var bee     = false;
             var trap    = false;
             var bonus   = 0;
-            for (var i in cells) switch (cells[i][3])                           {
+            for (var i in cells) switch (cells[i][2])                           {
                 case 'trap':    trap    = true; break;
                 case 'bee':     bee     = true; break;
-                case 'honney':  bonus   += 3; break;
-                case 'berry':   bonus   += 1; break;
+                case 'honey':   bonus   += 3; break;
+                case 'berry':   bonus   += 2; break;
                 default: break;
             }
-
-            return ((trap?-3:(bee?-1:bonus)) * bet.amount) - bet.amount;
+            var gain = ((trap?-3:(bee?-1:bonus)) * bet.amount) - bet.amount;
+            
+            return gain;
         }
         
         return service;

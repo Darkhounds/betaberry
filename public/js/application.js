@@ -50,17 +50,69 @@ angular.module('betaberry.darkhounds.net').factory('serviceGame', ['observable',
     function(observable, serviceAPI)                                            {
         var service         = observable.create();
 
-        var _bet            = null;
-        var _slots          = null;
-        var _closed         = true;
+        var _bet                = null;
+        service.hasBetted       = function()                                    {
+            return !!_bet;
+        };
+        service.getBet          = function()                                    {
+            return _bet;
+        };
+        service.getBetAmount    = function()                                    {
+            return _bet?_bet.amount:0;
+        };
+        service.getBetLevel     = function()                                    {
+            return _bet?_bet.level:1;
+        };
+        
+        var _slots              = null;
+        service.getSlots        = function()                                    {
+            return _slots || [];
+        };
+        
+        var _closed             = true;
+        service.isClosed        = function()                                    {
+            return _closed;
+        };
+
+        var _puzzle             = null;
+        service.getPuzzle       = function()                                    {
+            return _puzzle || [];
+        };
+
+        var _gain               = 0;
+        service.getGain         = function()                                    {
+            return _gain || [];
+        };
+
+        serviceAPI.$on('logedin', function(data)                                {
+            _bet            = null;
+            _closed         = false;
+            _puzzle         = null;
+            _slots          = null;
+            _gain           = 0;
+            service.$broadcast('changed');
+        });
+        serviceAPI.$on('logedout', function()                                   {
+            _bet            = null;
+            _closed         = false;
+            _puzzle         = null;
+            _slots          = null;
+            _gain           = 0;
+            service.$broadcast('changed');
+        });
         serviceAPI.$on('betted', function(data)                                 {
             _bet            = data;
             _closed         = !_bet;
+            _puzzle         = null;
+            _slots          = null;
+            _gain           = 0;
             service.$broadcast('changed');
         });
         serviceAPI.$on('played', function(data)                                 {
-            _closed = !_bet || data.closed;
-            _slots  = data.slots;
+            _closed         = !_bet || data.closed;
+            _puzzle         = data.puzzle || [];
+            _slots          = data.slots || [];
+            _gain           = data.gain || 0;
             service.$broadcast('changed');
         });
         
@@ -72,22 +124,6 @@ angular.module('betaberry.darkhounds.net').factory('serviceGame', ['observable',
         service.play        = function(cell, callback)                          {
             serviceAPI.play(cell, callback);
             return service;
-        };
-        
-        service.getBet      = function()                                        {
-            return _bet;
-        };
-        service.getBetAmount      = function()                                  {
-            return _bet?_bet.amount:0;
-        };
-        service.getBetLevel      = function()                                   {
-            return _bet?_bet.level:1;
-        };
-        service.getSlots    = function()                                        {
-            return _slots;
-        };
-        service.getClosed    = function()                                       {
-            return _closed;
         };
         
         return service;
@@ -102,7 +138,10 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             // return observable.create({response:{data: null, error: null}});
             return {response:{data: null, error: null}};
         }
-        
+
+        var _betMockup      = null;
+        var _puzzleMockup   = null;
+        var _playedCells    = [];
         var _sessionMockup  = null;
         service.login       = function(email, password, callback)               {
             // TODO: Do the actual http request to the server API
@@ -110,9 +149,11 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             var request            = _createRequest();
             if (_sessionMockup) request.response.error = {code:'sessionNotClosed', msg:'Session Not Closed!'};
             else                                                                {
-                _sessionMockup          = 
+                _sessionMockup          = {name: "Jhon", lastName:"Doe", credits:1000};
                 request.response.data   = {name: "Jhon", lastName:"Doe", credits:1000};
             }
+            //
+            _resetBetAndPuzzle();
             //
             if (callback && typeof callback === "function") callback(request.response);
             //
@@ -127,6 +168,11 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
 //        function validatePassword (password)                                    {
 //            return password.length > 6;
 //        };
+        function _resetBetAndPuzzle()                                           {
+            _betMockup          = null;
+            _puzzleMockup       = null;
+            _playedCells.length = 0;
+        }
         
         service.logout      = function(callback)                                {
             // TODO: Do the actual http request to the server API
@@ -138,21 +184,22 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
                 request.response.data   = {};
             }
             //
+            _resetBetAndPuzzle();
+            //
             if (callback && typeof callback === "function") callback(request.response);
             //
             return request;
         };
         
-        var _betMockup      = null;
-        var _puzzleMockup   = null;
         service.bet         = function(amount, level, callback)                 {
             // TODO: Do an actual server API request
 
             var request            = _createRequest();
-            if (!_sessionMockup) request.response.error = {code: "sessionClosed", msg: "Session Closed!"};
-            else if (_betMockup) request.response.error = {code: "betOpened", msg: "Bet Already Opened!"};
-            else if (_sessionMockup.credits < amount) request.response.error = {code: "betToHigh", msg: "Bet is To High"};
-            else if (level < 1 || level > 4) request.response.error = {code: "betInvalidLevel", msg: "Bet has an invalid level"};
+            if (!_sessionMockup) request.response.error = {code: "sessionClosed", msg: "Session closed"};
+            else if (_betMockup) request.response.error = {code: "betOpened", msg: "Bet Already opened"};
+            else if (!amount || isNaN(amount) || amount < 1) request.response.error = {code: "betInvalidAmount", msg: "Invalid bet amount"};
+            else if (amount > _sessionMockup.credits) request.response.error = {code: "betToHigh", msg: "Bet is to high"};
+            else if (!level || isNaN(level) || level < 1 || level > 4) request.response.error = {code: "betInvalidLevel", msg: "Bet has an invalid level"};
             else                                                                {
                 _puzzleMockup           = _createPuzzle();
                 _betMockup              =
@@ -182,6 +229,8 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             _setCellsToType(puzzle, tokens.berries, "berry");
             _setCellsToType(puzzle, tokens.traps,   "trap");
             _setCellsToType(puzzle, tokens.bees,    "bee");
+            
+            console.log("Puzzle", puzzle);
             
             return puzzle;
         }
@@ -214,60 +263,74 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             for (var id in cells) grid[cells[id][0]][cells[id][1]] = type;
         }
 
-        var _playedCells    = [];
         service.play        = function(cell, callback)                          {
             // TODO: Do the actual http request to the server API
             //
             var request                 = _createRequest();
-            if (!_sessionMockup)    request.response.error = {code: "sessionClosed", msg: "Session Closed!"};
-            else if (!_betMockup)   request.response.error = {code: "betClosed", msg: "No Bet Opened!"};
-            
-            var token                   = _puzzleMockup[cell[0]][cell[1]];
-            cell.push(token);
-            _playedCells.push(cell);
-            
-            request.response.data       = {
-                closed: (_playedCells.length >= _betMockup.level || token == "trap" || token == "berrie"),
-                slots: _playedCells.slice()
-            };
-            
-            if (request.response.data.closed)                                   {
-                request.response.data.gain  = _endGame(_playedCells, _betMockup);
-                _sessionMockup.credits      = _sessionMockup.credits + request.response.data.gain;
-                if (_sessionMockup.credits < 0) _sessionMockup.credits = 0;
-                request.response.data.credits = _sessionMockup.credits;
-                //
-                _betMockup          = null;
-                _puzzleMockup       = null;
-                _playedCells.length = 0;
+            if (!_sessionMockup)    request.response.error = {code: "sessionClosed", msg: "Session Closed"};
+            else if (!_betMockup)   request.response.error = {code: "betClosed", msg: "No Bet Opened"};
+            else if (_checkPlayedCell(_playedCells, cell)) request.response.error = {code: "slotAlreadyPlayed", msg: "The played slot was already played"};
+            if (!request.response.error)                                        {
+                var token                   = _puzzleMockup[cell[0]][cell[1]];
+                cell.push(token);
+                _playedCells.push(cell);
+
+                request.response.data       = {
+                    closed: (_playedCells.length >= _betMockup.level || token == "trap" || token == "bee"),
+                    slots: _playedCells.slice()
+                };
+
+                if (request.response.data.closed)                               {
+                    var gain                        = _endGame(_playedCells, _betMockup);
+                    //
+                    _sessionMockup.credits          = _sessionMockup.credits + gain;
+                    if (_sessionMockup.credits < 0) _sessionMockup.credits = 0;
+                    //
+                    request.response.data.gain      = gain;
+                    request.response.data.credits   = _sessionMockup.credits;
+                    request.response.data.puzzle    = _parsePuzzle(_puzzleMockup);
+                    //
+                    _resetBetAndPuzzle();
+                }
             }
-            
+
             if (callback && typeof callback === "function") callback(request.response);
             
             return request;
         };
         
-//        function _getTokensFrom(cells)                                          {
-//            var tokens  = [];
-//            for (var id in cells) tokens.push(_puzzleMockup[cells[id][0]][cells[id][1]]);
-//            return tokens;
-//        }
+        function _checkPlayedCell(cells, cell)                                  {
+            for (var i in cells)
+                if (cells[i][0] == cell[0] && cells[i][1] == cell[1])
+                    return true;
+            //
+            return false;
+        }
         
-        function _endGame(cells, bet)                                           {
-            // var tokens      = _getTokensFrom(cells);
+        function _parsePuzzle(puzzle)                                           {
+            var parsed = [];
             
+            for (var i in puzzle)
+                for (var j in puzzle[i])
+                    parsed.push([i*1, j*1, puzzle[i][j]]);
+
+            return parsed;
+        }
+
+        function _endGame(cells, bet)                                           {
             var bee     = false;
             var trap    = false;
             var bonus   = 0;
-            for (var i in cells) switch (cells[i][3])                           {
+            for (var i in cells) switch (cells[i][2])                           {
                 case 'trap':    trap    = true; break;
                 case 'bee':     bee     = true; break;
-                case 'honney':  bonus   += 3; break;
-                case 'berry':   bonus   += 1; break;
+                case 'honey':   bonus   += 3; break;
+                case 'berry':   bonus   += 2; break;
                 default: break;
             }
-
-            return ((trap?-3:(bee?-1:bonus)) * bet.amount) - bet.amount;
+            var gain = ((trap?-3:(bee?-1:bonus)) * bet.amount) - bet.amount;
+            
+            return gain;
         }
         
         return service;
@@ -330,48 +393,72 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
         replace:        true,
         templateUrl:    'html/templates/board.html',
         controller:     ['$scope', 'serviceSession', 'serviceGame', function($scope, serviceSession, serviceGame) {
-            $scope.rows = [];
-            
-            _resetRows();
-            
-            function _resetRows(slots)                                          {
-                for (var i = 0; i < 6; i++)                                     {
-                    if (!$scope.rows[i]) $scope.rows[i] = [];
-                    for (var j = 0; j < 6; j++)                                 {
-                        if ($scope.rows[i][j]) $scope.rows[i][j].token = '';
-                        else $scope.rows[i][j] = {row: i, col:j, token: ''};
-                    }
-                }
-                //
-                for (var k in slots) $scope.rows[slots[k][0]][slots[k][1]].token = slots[k][3];
-            }
-
+            $scope.amount       = 10;
             $scope.isLogged     = serviceSession.isOpen();
+            $scope.hasBetted    = serviceGame.hasBetted();
+            $scope.isOver       = serviceGame.isClosed();
+            $scope.gain         = serviceGame.getGain();
+            $scope.rows         = [];
             
             serviceSession.$on('changed', function()                            {
-                $scope.isLogged = serviceSession.isOpen();
+                $scope.isLogged     = serviceSession.isOpen();
+                $scope.hasBetted    = false;
+                $scope.isOver       = false;
+                $scope.gain         = 0;
                 $scope.$apply();
             });
 
-            $scope.hasBetted     = !!serviceGame.getBet();
-
             serviceGame.$on('changed', function()                               {
-                $scope.hasBetted = !!serviceGame.getBet();
+                $scope.hasBetted    = serviceGame.hasBetted();
+                $scope.isOver       = serviceGame.isClosed();
+                $scope.gain         = serviceGame.getGain();
+                // console.log("Gain:", $scope.gain);
+                
+                _updateRows($scope.rows, serviceGame.getSlots(), serviceGame.getPuzzle());
                 $scope.$apply();
             });
             
-            serviceGame.$on('changed', function()                               {
-                _resetRows(serviceGame.getSlots());
-                $scope.$apply();
-            });
-            
-            $scope.bet    = function()                                          {
-                serviceGame.bet($scope.amount, $scope.level);
+            $scope.bet    = function(amount, level)                             {
+                serviceGame.bet(amount, level);
             };
 
             $scope.play   = function(row, col)                                  {
                 serviceGame.play([row, col]);
             };
+            //
+            function _updateRows(rows, slots, puzzle)                           {
+                // Create the slots or mark them by default as hidden and hide
+                // their token
+                for (var i = 0; i < 5; i++)                                     {
+                    if (!rows[i]) rows[i] = [];
+                    for (var j = 0; j < 5; j++)                                 {
+                        if (rows[i][j])                                         {
+                            rows[i][j].hidden    = true;
+                            rows[i][j].selected  = false;
+                            rows[i][j].token     = '';
+                        } else rows[i][j] = {row: i, col:j, hidden:true, selected: false, token: ''};
+                    }
+                }
+                //
+                // If a selection of slots has been made then then select them,
+                // mark them as visible and disclose their token
+                for (var k in slots)                                            {
+                    var slot        = rows[slots[k][0]][slots[k][1]];
+                    slot.token      = slots[k][2];
+                    slot.hidden     = false;
+                    slot.selected   = true;
+                }
+                //
+                // If the puzzle has been disclosed then mark all the slots as
+                // visible and show their token
+                for (var k in puzzle)                                           {
+                    var slot        = rows[puzzle[k][0]][puzzle[k][1]];
+                    slot.token      = puzzle[k][2];
+                    slot.hidden     = false;
+                }
+                //
+            }
+            _updateRows($scope.rows);
         }]
     };
 }]);
@@ -417,10 +504,22 @@ angular.module('betaberry.darkhounds.net').directive('slot', [function()     {
         replace:        true,
         templateUrl:    'html/templates/slot.html',
         controller:     ['$scope', 'serviceGame', function($scope, serviceGame) {
+            $scope.state    = "hidden";
+            $scope.selected = false;
+            
             $scope.play    = function()                                         {
-                console.log($scope.item.row, $scope.item.col);
                 serviceGame.play([$scope.item.row, $scope.item.col])
             };
+            
+            $scope.$watch("item", function()                                    {
+                $scope.state    = _switchState($scope.item);
+                $scope.selected = $scope.item?$scope.item.selected:false;
+            }, true);
+            
+            function _switchState (item)                                        {
+                if (!item || item.hidden) return 'hidden';
+                return item.token?item.token:'empty';
+            }
         }]
     };
 }]);

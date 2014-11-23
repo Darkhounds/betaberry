@@ -27,7 +27,7 @@ describe("Game :: net/darkhounds/betaberry/cli/js/services/serviceGame.js", func
             expect(game.getBet()).to.exist;
             expect(game.getBetAmount()).to.equal(100);
             expect(game.getBetLevel()).to.equal(1);
-            expect(game.getClosed()).to.be.false;
+            expect(game.isClosed()).to.be.false;
             done();
         });
     });
@@ -38,7 +38,7 @@ describe("Game :: net/darkhounds/betaberry/cli/js/services/serviceGame.js", func
             listenerRemover = game.play([0,0]).$on("changed", function()        {
                 listenerRemover();
                 expect(game.getSlots()).to.have.length(1);
-                expect(game.getClosed()).to.be.true;
+                expect(game.isClosed()).to.be.true;
                 done();
             });
         });
