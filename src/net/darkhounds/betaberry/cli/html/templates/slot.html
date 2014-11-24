@@ -1,5 +1,8 @@
 <div class="slot" data-ng-class="[state, selected?'selected':'']" data-ng-click="play()">
+    <div>&nbsp;</div>
+<!--
     <div class="label">{{item.row}},{{item.col}}</div>
     <div class="label">{{item.token}}</div>
-    <div class="label" data-ng-show="selected">Danger: {{danger}}%</div>
+-->
+    <div class="label" data-ng-show="selected && danger"><img id="DANGER" data-ng-src="{{(danger>0)?'imgs/danger.png':'imgs/safe.png'}}">&nbsp;</div>
 </div>

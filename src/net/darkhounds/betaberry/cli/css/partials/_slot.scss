@@ -1,23 +1,40 @@
 .slot                                                                           {
-  display:  inline-flex;
-  flex-direction: column;
-  justify-content: space-between;
+  display:          inline-flex;
+  flex-direction:   column;
+  justify-content:  space-between;
+  margin:           2px;
   
-  border:   inset 1px #000000;
+  border:   solid 1px #000000;
   width:    64px;
   height:   64px;
+  
+  background-image: none;
+  background-color: lightgrey;
+  background-size:  cover;
+  
+  #DANGER                                                                       {
+    width:  16px;
+    height: 16px;
+  }
 }
 
 .slot.selected                                                                  {
-  border-color:     red;
+  border:           none;
 }
 
-.slot.selected.empty                                                            {
-  border: none;
+.slot.empty                                                                     {
+  background-image: url("../imgs/bush.png");
 }
-.slot.selected.berry, .slot.selected.honey                                      {
-  background-color: lightgreen;
+.slot.berry                                                                     {
+  background-image: url("../imgs/berry.png");
 }
-.slot.selected.bee, .slot.selected.trap                                         {
-  background-color: lightcoral;
+.slot.honey                                                                     {
+  background-image: url("../imgs/honey.png");
 }
+.slot.bee                                                                       {
+  background-image: url("../imgs/bee.png");
+}
+.slot.trap                                                                      {
+  background-image: url("../imgs/trap.png");
+}
+

@@ -2,10 +2,11 @@
   display:        inline-flex;
   flex-direction: column;
   
-  
   .panel                                                                        {
     display:        inline-flex;
     flex-direction: row;
+    align-items:    center;
+    vertical-align: middle;
     
     .label                                                                      {
 
@@ -20,12 +21,22 @@
     
   }
   
+  #GAIN                                                                         {
+    
+  }
+  
   #ROWS                                                                         {
     flex-direction: column;
+    margin:        2px;
     
     .row                                                                        {
       display:        inline-flex;
       flex-direction: row;
+      margin:        2px;
+      
     }
+  }
+  #ROWS.disabled                                                                {
+    opacity: 0.9;
   }
 }

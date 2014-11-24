@@ -198,7 +198,8 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
                 case 'berry':   bonus   += 2; break;
                 default: break;
             }
-            var gain = (((trap?-3:(bee?-1:bonus)) * bet.amount) * bet.level) - bet.amount;
+            if (!bonus && (trap || bee)) bonus = 1;
+            var gain = (((trap?-3:(bee?-2:1)) * bonus * bet.amount) * bet.level) - bet.amount;
             
             return gain;
         }
@@ -222,7 +223,6 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
         }
         
         function _tokenToDanger(token)                                          {
-            console.log("token", token);
             switch (token)                                                      {
                 case "bee":     return 1;
                 case "trap":    return 1;
