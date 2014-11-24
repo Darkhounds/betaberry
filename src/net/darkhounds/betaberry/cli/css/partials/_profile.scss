@@ -1,7 +1,9 @@
 .profile                                                                        {
   .panel                                                                        {
-    display:        inline-flex;
-    flex-direction: row;
+    // display:        inline-flex;
+    // flex-direction: row;
+    @include display-flex(inline-flex);
+    @include flex-direction(row);
     align-items: center;
     
     .label                                                                      {

@@ -36,34 +36,44 @@ html, body {
   opacity: 0.2; }
 
 .profile .panel {
+  display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-flex-direction: row;
   flex-direction: row;
   align-items: center; }
   .profile .panel .field {
     width: 75px; }
 
 .board {
+  display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-flex-direction: column;
   flex-direction: column; }
   .board .panel {
+    display: -webkit-inline-flex;
     display: inline-flex;
+    -webkit-flex-direction: row;
     flex-direction: row;
     align-items: center;
     vertical-align: middle; }
   .board .panel.disabled {
     opacity: 0.6; }
   .board #ROWS {
+    -webkit-flex-direction: column;
     flex-direction: column;
     margin: 2px; }
     .board #ROWS .row {
-      display: inline-flex;
+      display: -webkit-flex;
+      display: flex;
       flex-direction: row;
       margin: 2px; }
   .board #ROWS.disabled {
     opacity: 0.9; }
 
 .slot {
+  display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-flex-direction: column;
   flex-direction: column;
   justify-content: space-between;
   margin: 2px;
