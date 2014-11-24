@@ -1,6 +1,8 @@
 .slot                                                                           {
-  display:          inline-flex;
-  flex-direction:   column;
+//  display:          inline-flex;
+//  flex-direction:   column;
+  @include display-flex(inline-flex);
+  @include flex-direction(column);
   justify-content:  space-between;
   margin:           2px;
   
