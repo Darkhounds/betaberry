@@ -10,7 +10,7 @@
     vertical-align: middle;
     
     .label                                                                      {
-
+      
     }
   }
 
@@ -19,30 +19,33 @@
   }
   
   #BET                                                                          {
-    
+    .field                                                                      {
+      width: 85px;
+    }
   }
   
   #GAIN                                                                         {
-
-  }
-
-  #ROWS.panel                                                                   {
-    > *                                                                         {
-      margin:   1px;
-      padding:  1px;
-    }
+    
   }
 
   #ROWS                                                                         {
-    @include flex-direction(column);
+    border:   none;
+    padding:  0px;
+    margin:   0px;
     
     .row                                                                        {
-      @include display-flex;
-      flex-direction: row;
-      margin:        2px;
+      border:   none;
+      padding:  0px;
+      margin:   0px;
       
+      .cell                                                                     {
+        border:   none;
+        padding:  0px;
+        margin:   0px;
+      }
     }
   }
+  
   #ROWS.disabled                                                                {
     opacity: 0.9;
   }
