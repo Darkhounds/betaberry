@@ -8,6 +8,7 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
         templateUrl:    'html/templates/board.html',
         controller:     ['$scope', 'serviceSession', 'serviceGame', function($scope, serviceSession, serviceGame) {
             $scope.amount       = 10;
+            $scope.level        = 0;
             $scope.isLogged     = serviceSession.isOpen();
             $scope.hasBetted    = serviceGame.hasBetted();
             $scope.isOver       = serviceGame.isClosed();
@@ -16,9 +17,10 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
             
             serviceSession.$on('changed', function()                            {
                 $scope.isLogged     = serviceSession.isOpen();
-                $scope.hasBetted    = false;
-                $scope.isOver       = false;
-                $scope.gain         = 0;
+                $scope.hasBetted    = $scope.isLogged?serviceGame.hasBetted():false;
+                $scope.isOver       = $scope.isLogged?serviceGame.isClosed():false;
+                $scope.gain         = $scope.isLogged?serviceGame.getGain():0;
+                $scope.level        = $scope.isLogged?$scope.level:0;
                 $scope.$apply();
             });
 
@@ -26,12 +28,14 @@ angular.module('betaberry.darkhounds.net').directive('board', [function()     {
                 $scope.hasBetted    = serviceGame.hasBetted();
                 $scope.isOver       = serviceGame.isClosed();
                 $scope.gain         = serviceGame.getGain();
+                $scope.level        = ($scope.hasBetted && !$scope.isOver)?$scope.level:0;
                 
                 _updateRows($scope.rows, serviceGame.getSlots(), serviceGame.getPuzzle());
                 $scope.$apply();
             });
             
             $scope.bet    = function(amount, level)                             {
+                $scope.level        = level;
                 serviceGame.bet(amount, level);
             };
 

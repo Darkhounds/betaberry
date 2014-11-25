@@ -113,6 +113,9 @@ html, body {
     opacity: 0.6; }
   .board #BET .field {
     width: 85px; }
+  .board #BET .button.selected {
+    background-color: lightgray;
+    border-style: inset; }
   .board #ROWS {
     border: none;
     padding: 0px;

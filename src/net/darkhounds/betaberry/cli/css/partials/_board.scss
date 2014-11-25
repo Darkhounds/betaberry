@@ -22,6 +22,10 @@
     .field                                                                      {
       width: 85px;
     }
+    .button.selected                                                            {
+      background-color: lightgray;
+      border-style:     inset;
+    }
   }
   
   #GAIN                                                                         {
