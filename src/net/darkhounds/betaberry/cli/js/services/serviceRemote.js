@@ -1,10 +1,9 @@
-angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
-    function()                                                                  {
+angular.module('betaberry.darkhounds.net').factory('serviceRemote', ["serviceValidator",
+    function(serviceValidator)                                                  {
         var service         = {};
         var _gridSize       = 5;
         
         function _createRequest()                                               {
-            // return observable.create({response:{data: null, error: null}});
             return {response:{data: null, error: null}};
         }
 
@@ -16,7 +15,9 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             // TODO: Do the actual http request to the server API
             //
             var request            = _createRequest();
-            if (_sessionMockup) request.response.error = {code:'sessionNotClosed', msg:'Session Not Closed!'};
+            if (!serviceValidator.checkEmail(email)) request.response.error = {code:'invallidEmail', msg:'Invalid Email'};
+            else if (!serviceValidator.checkPassword(password)) request.response.error = {code:'invallidPassword', msg:'Invalid Password'};
+            else if (_sessionMockup) request.response.error = {code:'sessionNotClosed', msg:'Session Not Closed'};
             else                                                                {
                 _sessionMockup          = {name: "Jhon", lastName:"Doe", credits:1000};
                 request.response.data   = {name: "Jhon", lastName:"Doe", credits:1000};
@@ -29,14 +30,6 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             return request;
         };
         
-//        function validateEmail (email)                                          {
-//            var pattern  = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-//            return pattern.test(email);
-//        };
-//      
-//        function validatePassword (password)                                    {
-//            return password.length > 6;
-//        };
         function _resetBetAndPuzzle()                                           {
             _betMockup          = null;
             _puzzleMockup       = null;
@@ -47,7 +40,7 @@ angular.module('betaberry.darkhounds.net').factory('serviceRemote', [
             // TODO: Do the actual http request to the server API
             //
             var request            = _createRequest();
-            if (!_sessionMockup) request.response.error  = {code:'sessionNotOpened', msg:'Session Not Opened!'};
+            if (!_sessionMockup) request.response.error  = {code:'sessionNotOpened', msg:'Session Not Opened'};
             else                                                                {
                 _sessionMockup          = null;
                 request.response.data   = {};

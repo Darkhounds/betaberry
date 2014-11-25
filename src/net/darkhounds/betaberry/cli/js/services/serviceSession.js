@@ -1,5 +1,5 @@
-angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observable', 'serviceAPI',
-    function(observable, serviceAPI)                                            {
+angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observable', 'serviceAPI', 'serviceValidator', 'serviceMessages',
+    function(observable, serviceAPI, serviceValidator, serviceMessages)         {
         var service         = observable.create();
         
         var _session        = null;
@@ -18,7 +18,9 @@ angular.module('betaberry.darkhounds.net').factory('serviceSession', ['observabl
         });
         
         service.login       = function(email, password, callback)               {
-            serviceAPI.login(email, password, callback);
+            if (!serviceValidator.checkEmail(email)) serviceMessages.add('error', "Invalid Email");
+            else if (!serviceValidator.checkPassword(password)) serviceMessages.add('error', "Invalid Password");
+            else serviceAPI.login(email, password, callback);
             return service;
         };
         

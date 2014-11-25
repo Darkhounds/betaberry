@@ -1,12 +1,8 @@
 .board                                                                          {
-//  display:        inline-flex;
-//  flex-direction: column;
   @include display-flex(inline-flex);
   @include flex-direction(column);
   
   .panel                                                                        {
-//    display:        inline-flex;
-//    flex-direction: row;
     @include display-flex(inline-flex);
     @include flex-direction(row);
     
@@ -27,16 +23,20 @@
   }
   
   #GAIN                                                                         {
-    
+
   }
-  
+
+  #ROWS.panel                                                                   {
+    > *                                                                         {
+      margin:   1px;
+      padding:  1px;
+    }
+  }
+
   #ROWS                                                                         {
-//    flex-direction: column;
     @include flex-direction(column);
-    margin:        2px;
     
     .row                                                                        {
-//      display:        inline-flex;
       @include display-flex;
       flex-direction: row;
       margin:        2px;

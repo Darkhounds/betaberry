@@ -6,15 +6,19 @@ angular.module('betaberry.darkhounds.net').directive('profile', [function()     
         transcode:      true,
         replace:        true,
         templateUrl:    'html/templates/profile.html',
-        controller:     ['$scope', 'serviceSession', function($scope, serviceSession) {
+        controller:     ['$scope', 'serviceSession', 'serviceGame', function($scope, serviceSession, serviceGame) {
             $scope.isLogged     = serviceSession.isOpen();
+            $scope.username     = "test@test.com";
+            $scope.password     = "1234567";
             $scope.name         = "";
-            $scope.credits      = serviceSession.isOpen();
+            $scope.name         = "";
+            $scope.credits      = serviceSession.getCredits();
             
             serviceSession.$on('changed', function()                            {
                 $scope.isLogged = serviceSession.isOpen();
                 $scope.name     = serviceSession.getName();
-                $scope.credits  = serviceSession.getCredits();
+                // $scope.credits  = (serviceGame.hasBetted() && serviceGame.isClosed())?serviceSession.getCredits():$scope.credits;
+                $scope.credits  = (!serviceGame.hasBetted() || serviceGame.isClosed())?serviceSession.getCredits():$scope.credits;
                 $scope.$apply();
             });
             

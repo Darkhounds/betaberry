@@ -12,7 +12,8 @@ html, body                                                                      
   padding: 2px;
   
   > *                                                                           {
-    margin: 2px;
+    margin:   1px;
+    padding:  1px;
   }
 }
 
@@ -35,6 +36,10 @@ html, body                                                                      
   padding:          3px;
   vertical-align:   middle;
   text-align:       center;
+}
+
+.filler                                                                         {
+  flex: 2;
 }
 
 .disabled {

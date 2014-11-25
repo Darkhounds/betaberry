@@ -1,16 +1,15 @@
 .profile                                                                        {
   .panel                                                                        {
-    // display:        inline-flex;
-    // flex-direction: row;
-    @include display-flex(inline-flex);
+    @include display-flex(flex);
     @include flex-direction(row);
     align-items: center;
+    justify-content: space-between;
     
     .label                                                                      {
       
     }
     .field                                                                      {
-      width: 75px;
+      width: 85px;
     }
     .button                                                                     {
       

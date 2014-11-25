@@ -10,7 +10,8 @@ html, body {
   border: solid 1px #000000;
   padding: 2px; }
   .panel > * {
-    margin: 2px; }
+    margin: 1px;
+    padding: 1px; }
 
 .label {
   vertical-align: middle;
@@ -32,17 +33,65 @@ html, body {
   vertical-align: middle;
   text-align: center; }
 
+.filler {
+  flex: 2; }
+
 .disabled {
   opacity: 0.2; }
 
-.profile .panel {
+.viewport {
   display: -webkit-inline-flex;
   display: inline-flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px; }
+  .viewport .panel {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    -webkit-flex-direction: column;
+    flex-direction: column; }
+
+.popups {
+  position: absolute;
+  z-index: 1000;
+  display: -webkit-inline-flex;
+  display: inline-flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  background-color: rgba(0, 0, 0, 0.25); }
+  .popups .panel {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: solid 1px #000000;
+    background-color: #ffffff;
+    width: 300px;
+    height: 180px; }
+
+.profile .panel {
+  display: -webkit-flex;
+  display: flex;
   -webkit-flex-direction: row;
   flex-direction: row;
-  align-items: center; }
+  align-items: center;
+  justify-content: space-between; }
   .profile .panel .field {
-    width: 75px; }
+    width: 85px; }
 
 .board {
   display: -webkit-inline-flex;
@@ -58,10 +107,12 @@ html, body {
     vertical-align: middle; }
   .board .panel.disabled {
     opacity: 0.6; }
+  .board #ROWS.panel > * {
+    margin: 1px;
+    padding: 1px; }
   .board #ROWS {
     -webkit-flex-direction: column;
-    flex-direction: column;
-    margin: 2px; }
+    flex-direction: column; }
     .board #ROWS .row {
       display: -webkit-flex;
       display: flex;

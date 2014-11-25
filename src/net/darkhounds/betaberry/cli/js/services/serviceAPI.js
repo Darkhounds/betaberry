@@ -1,11 +1,12 @@
-angular.module('betaberry.darkhounds.net').factory('serviceAPI', ['observable', 'serviceRemote',
-    function(observable, serviceRemote)                                         {
+angular.module('betaberry.darkhounds.net').factory('serviceAPI', ['observable', 'serviceRemote', 'serviceMessages',
+    function(observable, serviceRemote, serviceMessages)                        {
         var service         = observable.create();
         
         service.login       = function(email, password, callback)               {
             var request     = serviceRemote.login(email, password, function(response){
                 if (callback && typeof callback === "function") callback(response);
-                if (!response.error) service.$broadcast('logedin', response.data);
+                if (response.error) serviceMessages.add('error', response.error.msg);
+                else service.$broadcast('logedin', response.data);
             });
             //
             return service; 

@@ -1,6 +1,4 @@
 .slot                                                                           {
-//  display:          inline-flex;
-//  flex-direction:   column;
   @include display-flex(inline-flex);
   @include flex-direction(column);
   justify-content:  space-between;

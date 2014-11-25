@@ -2,6 +2,7 @@
     
     <div class="panel" id="BET" data-ng-class="{disabled: isLogged && hasBetted && !isOver}" data-ng-disabled="hasBetted && !isOver">
         <div class="label">Bet:</div><input data-ng-model="amount">
+        <div class="filler">&nbsp;</div>
         <div class="button" data-ng-click="bet(amount, 1)">x1</div>
         <div class="button" data-ng-click="bet(amount, 2)">x2</div>
         <div class="button" data-ng-click="bet(amount, 3)">x3</div>
