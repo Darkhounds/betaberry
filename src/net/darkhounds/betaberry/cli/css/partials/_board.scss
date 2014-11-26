@@ -5,9 +5,8 @@
   .panel                                                                        {
     @include display-flex(inline-flex);
     @include flex-direction(row);
-    
-    align-items:    center;
-    vertical-align: middle;
+    @include align-items(center);
+    @include justify-content(middle);
     
     .label                                                                      {
       

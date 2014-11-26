@@ -1,8 +1,8 @@
 .viewport                                                                       {
   @include display-flex(inline-flex);
   @include flex-direction(column);
-  align-items:      center;
-  justify-content:  center;
+  @include align-items(center);
+  @include justify-content(center);
 
   position: absolute;
   top:      0px;
