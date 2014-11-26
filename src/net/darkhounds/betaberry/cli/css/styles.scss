@@ -9,7 +9,26 @@
 @import "compass/layout/stretching";
 @import "compass/typography/text/ellipsis";
 
+// -----------------------------------------------------------------------------
+//{ region CONFIG
+$font-sizeDefault:  1.5em;
+$border:            solid 0.1em #000000;
+$image-SlotEmpty:   "bush.png";
+$image-SlotBerry:   "berry.png";
+$image-SlotHoney:   "honey.png";
+$image-SlotBee:     "bee.png";
+$image-SlotTrap:    "trap.png";
+//} endregion
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------------
+//{ region Mixins
+@import "mixins/backgroundImage";
+//} endregion
+// -----------------------------------------------------------------------------
+
 @import "partials/global";
+
 
 // -----------------------------------------------------------------------------
 //{ region PLUGINS/DIRECTIVES

@@ -3,21 +3,21 @@
   @include flex-direction(column);
   @include justify-content(space-between);
   
+  margin:       0.1em;
+  padding:      0.1em;
   
-  margin:           1px;
-  padding:          1px;
-  
-  border:   solid 1px #CCCCCC;
-  width:    50px;
-  height:   50px;
+  border:       $border;
+  border-color: #CCCCCC;
+  width:        4.56em;
+  height:       4.56em;
   
   background-image: none;
   background-color: lightgrey;
   background-size:  cover;
   
   #DANGER                                                                       {
-    width:  16px;
-    height: 16px;
+    width:  1em;
+    height: 1em;
   }
 }
 
@@ -26,18 +26,18 @@
 }
 
 .slot.empty                                                                     {
-  background-image: url("../imgs/bush.png");
+  @include backgroundImage($image-SlotEmpty);
 }
 .slot.berry                                                                     {
-  background-image: url("../imgs/berry.png");
+  @include backgroundImage($image-SlotBerry);
 }
 .slot.honey                                                                     {
-  background-image: url("../imgs/honey.png");
+  @include backgroundImage($image-SlotHoney);
 }
 .slot.bee                                                                       {
-  background-image: url("../imgs/bee.png");
+  @include backgroundImage($image-SlotBee);
 }
 .slot.trap                                                                      {
-  background-image: url("../imgs/trap.png");
+  @include backgroundImage($image-SlotTrap);
 }
 

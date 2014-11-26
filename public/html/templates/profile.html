@@ -1,1 +1,16 @@
-<div class="profile"><div class="panel" data-ng-hide="isLogged"><input class="field" id="USERNAME" data-ng-model="username" placeholder="username"><input class="field" id="PASSWORD" data-ng-model="password" type="password" placeholder="password"><div class="filler">&nbsp;</div><div class="button" id="LOGIN" class="button" data-ng-click="login('teste')">Login</div></div><div class="panel" data-ng-show="isLogged"><div class="label">{{name}}</div><div class="label">{{credits}}</div><div class="filler">&nbsp;</div><div class="button" id="LOGOUT" class="button" data-ng-click="logout()">Logout</div></div></div>
+<div class="profile">
+    <div class="panel" data-ng-hide="isLogged">
+        <!--<div    class="label">Username</div>-->
+        <input  class="field"   id="USERNAME"   data-ng-model="username" placeholder="username" />
+        <!--<div    class="label">Password</div>-->
+        <input  class="field"   id="PASSWORD"   data-ng-model="password" type="password" placeholder="password" />
+        <div    class="filler">&nbsp;</div>
+        <div    class="button"  id="LOGIN" class="button" data-ng-click="login('teste')">Login</div>
+    </div>
+    <div class="panel" data-ng-show="isLogged">
+        <div    class="label">{{name}}</div>
+        <div    class="label">{{credits}}</div>
+        <div    class="filler">&nbsp;</div>
+        <div    class="button"  id="LOGOUT" class="button" data-ng-click="logout()">Logout</div>
+    </div>
+</div>

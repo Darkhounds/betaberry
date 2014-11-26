@@ -2,6 +2,7 @@
 # project_path            = ""
 sass_path               = "src/net/darkhounds/betaberry/cli/css"
 css_path                = "public/css"
+images_path             = "public/imgs"
 
 # Production paths
 http_path               = "/"

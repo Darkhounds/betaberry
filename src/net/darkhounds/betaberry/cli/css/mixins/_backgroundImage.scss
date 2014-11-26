@@ -1,0 +1,4 @@
+@mixin backgroundImage($url)                                                    {
+    background-image:   inline-image($url);
+}
+
