@@ -21,6 +21,7 @@ body {
     padding: 0.01em; }
 
 .label {
+  display: inline-block;
   vertical-align: middle;
   height: 1.5em;
   line-height: 1.5em;
@@ -51,6 +52,7 @@ body {
   font-size: 1.5em; }
 
 .filler {
+  display: inline-block;
   -webkit-flex: 2;
   flex: 2; }
 
@@ -76,6 +78,27 @@ body {
     display: inline-flex;
     -webkit-flex-direction: column;
     flex-direction: column; }
+  .viewport #LANDSCPAE_ERROR {
+    display: none; }
+  @media screen and (max-height: 380px) and (orientation: landscape) {
+    .viewport .panel {
+      display: none; }
+    .viewport #LANDSCPAE_ERROR {
+      display: -webkit-inline-flex;
+      display: inline-flex;
+      -webkit-flex-direction: column;
+      flex-direction: column;
+      -webkit-align-items: center;
+      align-items: center;
+      -webkit-justify-content: center;
+      justify-content: center;
+      position: absolute;
+      background-color: #ffffff;
+      z-index: 100000;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0; } }
 
 .popups {
   position: absolute;
