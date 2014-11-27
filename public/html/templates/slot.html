@@ -1,1 +1,1 @@
-<div class="slot" data-ng-class="[state, selected?'selected':'']" data-ng-click="play()"><div>&nbsp;</div><div class="label" data-ng-show="selected && danger"><img id="DANGER" data-ng-src="{{(danger>0)?'imgs/danger.png':'imgs/safe.png'}}">&nbsp;</div></div>
+<div class="slot" data-ng-class="[state, selected?'selected':'']" data-ng-click="play()"><div>&nbsp;</div><div class="icon" data-ng-show="selected && danger" data-ng-class="(danger>0)?'danger':'safe'"></div></div>

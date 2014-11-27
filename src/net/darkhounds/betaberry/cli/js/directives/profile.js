@@ -6,7 +6,7 @@ angular.module('betaberry.darkhounds.net').directive('profile', [function()     
         transcode:      true,
         replace:        true,
         templateUrl:    'html/templates/profile.html',
-        controller:     ['$scope', 'serviceSession', 'serviceGame', function($scope, serviceSession, serviceGame) {
+        controller:     ['$scope', 'serviceSession', 'serviceGame', 'serviceMessages', function($scope, serviceSession, serviceGame, serviceMessages) {
             $scope.isLogged     = serviceSession.isOpen();
             $scope.username     = "test@test.com";
             $scope.password     = "1234567";
@@ -29,7 +29,11 @@ angular.module('betaberry.darkhounds.net').directive('profile', [function()     
             $scope.logout   = function()                                        {
                 serviceSession.logout()
             };
-            
+
+            $scope.help     = function()                                        {
+                serviceMessages.add('help');
+            };
+
         }]
     };
 }]);

@@ -1,7 +1,13 @@
 <div class="popups" data-ng-show="message?true:false">
     <div class="panel">
         <div id="ERROR" data-ng-show="message.type == 'error'">{{message.text}}</div>
-        <div id="HELP"  data-ng-show="message.type == 'help'">{{message.text}}</div>
+        <div id="HELP"  data-ng-show="message.type == 'help'">
+            <div class="label"><span>1 - Choose a bet amount and level.</span></div>
+            <div class="label"><span>2 - Reveal slots equal to the bet level.</span></div>
+            <div class="label"><span>3 - Revealed</span><div class="berry"></div><span>and</span><div class="honey"></div><span>hand out credits.</span></div>
+            <div class="label"><span>4 - Revealed </span><div class="bee"></div><span> and </span><div class="trap"></div><span>end the game immediately and remove credits.</span></div>
+            <div class="label"><span>5 - Each slot surroundings can be neutral, dangerous (</span><div class="danger"></div><span>) or safe(</span><div class="safe"></div><span>) depending on how many berries, honey, bees and traps are there.</span></div>
+        </div>
         <div id="GAIN"  data-ng-show="message.type == 'gain'">{{message.text}}</div>
         <div class="button" data-ng-click="close()">close</div>
     </div>

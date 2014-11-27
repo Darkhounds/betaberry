@@ -19,11 +19,61 @@
     @include flex-direction(column);
     @include align-items(center);
     @include justify-content(center);
-    
+
     border:           $border;
     background-color: #ffffff;
     
     width:  21em;
-    height: 16em;
+    min-height: 16em;
+    
+    .berry, .honey, .bee, .trap, .safe, .danger                                 {
+      display: inline-block;
+      background-size: contain;
+    }
+
+    .berry, .honey, .bee, .trap                                                 {
+      width:  1.7em;
+      height: 1.7em;
+    }
+    
+    .safe, .danger                                                              {
+      width:  1em;
+      height: 1em;
+    }
+    
+    .berry                                                                      {
+      @include backgroundImage($image-SlotBerry);
+    }
+    
+    .honey                                                                      {
+      @include backgroundImage($image-SlotHoney);
+    }
+    
+    .bee                                                                        {
+      @include backgroundImage($image-SlotBee);
+    }
+    
+    .trap                                                                       {
+      @include backgroundImage($image-SlotTrap);
+    }
+    
+    .danger                                                                     {
+      @include backgroundImage($image-SlotDanger);
+    }
+    
+    .safe                                                                       {
+      @include backgroundImage($image-SlotSafe);
+    }
+    
+    #HELP                                                                       {
+      padding:            1em;
+      
+      .label                                                                    {
+        line-height:      1.4em;
+        font-size:        1.4em;
+        height:           auto;
+        vertical-align:  middle;
+      }
+    }
   }
 }

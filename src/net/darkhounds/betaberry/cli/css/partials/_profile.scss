@@ -16,18 +16,24 @@
       
     }
   }
-
+  
   #USERNAME                                                                     {
-
+    
   }
   #PASSWORD                                                                     {
-
+    
   }
   #LOGIN                                                                        {
-
+    
+  }
+  #HELP                                                                         {
+    @include backgroundImage($image-Help);
+    background-size:  contain;
+    width:            1.5em;
+    height:           1.5em;
+    margin:           0 1em;
   }
   #LOGOUT                                                                       {
-
   }
 }
 
