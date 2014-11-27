@@ -1,6 +1,7 @@
 .popups                                                                         {
   position:         absolute;
   z-index:          1000;
+  opacity:          0;
   
   @include display-flex(inline-flex);
   @include flex-direction(column);
@@ -22,8 +23,9 @@
 
     border:           $border;
     background-color: #ffffff;
-    
-    width:  21em;
+
+    min-width:  18em;
+    max-width:  24em;
     min-height: 16em;
     
     .berry, .honey, .bee, .trap, .safe, .danger                                 {

@@ -103,6 +103,7 @@ body {
 .popups {
   position: absolute;
   z-index: 1000;
+  opacity: 0;
   display: -webkit-inline-flex;
   display: inline-flex;
   -webkit-flex-direction: column;
@@ -127,7 +128,8 @@ body {
     justify-content: center;
     border: solid 0.1em #000000;
     background-color: #ffffff;
-    width: 21em;
+    min-width: 18em;
+    max-width: 24em;
     min-height: 16em; }
     .popups .panel .berry, .popups .panel .honey, .popups .panel .bee, .popups .panel .trap, .popups .panel .safe, .popups .panel .danger {
       display: inline-block;

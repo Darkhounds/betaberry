@@ -6,7 +6,7 @@ angular.module('betaberry.darkhounds.net').directive('popups', [function()      
         transcode:      true,
         replace:        true,
         templateUrl:    'html/templates/popups.html',
-        controller:     ['$scope', 'serviceMessages', function($scope, serviceMessages) {
+        controller:     ['$scope', "$element", 'serviceMessages', function($scope, $element, serviceMessages) {
             $scope.message = null;
             
             serviceMessages.$on("changed", function(){
@@ -16,13 +16,14 @@ angular.module('betaberry.darkhounds.net').directive('popups', [function()      
             
             $scope.close    = function()                                        {
                 serviceMessages.remove($scope.message);
-                $scope.message = null;
                 _next();
             };
             
+            var _tween = null;
             function _next()                                                    {
-                $scope.message = $scope.message || serviceMessages.getNext();
-                console.log($scope.message);
+                var msg     = serviceMessages.getNext();
+                _tween      = TweenMax.to($element, 0.2, {autoAlpha:msg?1:0, ease:Linear.easeNone});
+                $scope.message = msg || $scope.message; 
             }
         }]
     };
