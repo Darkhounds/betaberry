@@ -78,7 +78,7 @@ body {
     display: inline-flex;
     -webkit-flex-direction: column;
     flex-direction: column; }
-  .viewport #LANDSCPAE_ERROR {
+  .viewport #LANDSCAPE_ERROR {
     display: none; }
   @media screen and (max-height: 380px) and (orientation: landscape) {
     .viewport .panel {
